@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spaces — Real Analysis Study Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  min-height:100vh;
+  background:#FAF6F1;
+  font-family:'Source Serif 4',Georgia,serif;
+  color:#2C2418;
+  line-height:1.65;
+}
+.app-title{font-family:'Crimson Pro',Georgia,serif;font-weight:300;letter-spacing:.08em}
+.serif{font-family:'Source Serif 4',Georgia,serif}
+.mono{font-family:'JetBrains Mono',monospace;font-size:.85em}
+header{
+  border-bottom:1px solid rgba(44,36,24,.1);
+  background:rgba(250,246,241,.96);
+  backdrop-filter:blur(10px);
+  position:sticky;top:0;z-index:100;
+}
+.header-inner{max-width:1000px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.logo{display:flex;align-items:baseline;gap:12px;cursor:pointer;text-decoration:none;color:inherit}
+.logo-title{font-size:22px}
+.logo-sub{font-size:12px;color:#9B8E7E;letter-spacing:.08em;text-transform:uppercase;font-family:'JetBrains Mono',monospace}
+nav{display:flex;gap:2px;flex-wrap:wrap}
+.nav-btn{
+  background:none;border:none;cursor:pointer;
+  font-family:'Crimson Pro',Georgia,serif;font-size:15px;
+  color:#6B5D4F;padding:8px 16px;border-radius:4px;
+  transition:all .2s;letter-spacing:.04em;
+}
+.nav-btn:hover{background:rgba(107,93,79,.08);color:#2C2418}
+.nav-btn.active{color:#2C2418;background:rgba(107,93,79,.12);font-weight:600}
+.progress-bar{height:4px;background:rgba(44,36,24,.08);border-radius:2px;overflow:hidden;max-width:1000px;margin:0 auto}
+.progress-fill{height:100%;background:#4A6741;border-radius:2px;transition:width .5s ease}
+main{max-width:1000px;margin:0 auto;padding:32px 24px}
+.view{display:none}
+.view.active{display:block;animation:fadeIn .3s ease forwards}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* Cards grid */
+.chapters-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.chapter-card{
+  border:1px solid rgba(44,36,24,.12);border-radius:8px;padding:20px 24px;
+  cursor:pointer;transition:all .25s ease;background:#fff;position:relative;overflow:hidden;
+}
+.chapter-card:hover{border-color:rgba(44,36,24,.25);transform:translateY(-2px);box-shadow:0 4px 20px rgba(44,36,24,.08)}
+.chapter-card .accent-bar{position:absolute;left:0;top:0;bottom:0;width:4px;transition:width .25s ease}
+.chapter-card:hover .accent-bar{width:6px}
+.ch-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.ch-title{font-family:'Crimson Pro',Georgia,serif;font-size:19px;font-weight:600;margin-bottom:4px}
+.ch-subtitle{font-size:13px;color:#8A7D6F}
+.ch-tags{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.ch-tag{font-size:11px;padding:2px 8px;border-radius:10px;font-family:'JetBrains Mono',monospace}
+
+/* Pill */
+.pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-family:'JetBrains Mono',monospace;letter-spacing:.05em;text-transform:uppercase}
+
+/* Buttons */
+.btn-primary{
+  background:#2C2418;color:#FAF6F1;border:none;border-radius:6px;
+  padding:10px 24px;cursor:pointer;font-family:'Crimson Pro',Georgia,serif;
+  font-size:15px;letter-spacing:.03em;transition:all .2s;
+}
+.btn-primary:hover{background:#4A3F32}
+.btn-primary:disabled{opacity:.5;cursor:default}
+.btn-outline{
+  background:none;color:#6B5D4F;border:1.5px solid rgba(44,36,24,.2);
+  border-radius:6px;padding:8px 20px;cursor:pointer;
+  font-family:'Crimson Pro',Georgia,serif;font-size:14px;transition:all .2s;
+}
+.btn-outline:hover{border-color:rgba(44,36,24,.5);color:#2C2418}
+.btn-outline:disabled{opacity:.4;cursor:default}
+.btn-green{background:#4A6741}
+.btn-red-outline{border-color:#8B3A3A40;color:#8B3A3A}
+
+/* Flashcard */
+.flashcard-container{
+  background:#fff;border:1px solid rgba(44,36,24,.1);border-radius:12px;
+  min-height:320px;padding:40px;cursor:pointer;transition:all .3s ease;
+  position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
+}
+.flashcard-container:hover{box-shadow:0 8px 30px rgba(44,36,24,.1)}
+.fc-meta{position:absolute;top:16px;left:20px;display:flex;gap:8px;align-items:center}
+.fc-counter{position:absolute;top:16px;right:20px}
+.fc-body{padding:20px 0;max-width:600px}
+.fc-answer{white-space:pre-line;text-align:left;font-size:15px;line-height:1.7}
+.fc-hint{color:#C4A265;font-size:12px;margin-top:20px;font-family:'JetBrains Mono',monospace}
+.fc-controls{display:flex;justify-content:center;gap:12px;margin-top:20px;flex-wrap:wrap}
+.difficulty-dots{display:flex;gap:3px}
+.difficulty-dot{display:inline-block;width:8px;height:8px;border-radius:50%}
+.difficulty-dot.on{background:#C4A265}
+.difficulty-dot.off{background:rgba(44,36,24,.1)}
+
+/* Filters */
+.filter-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.filter-controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+select.filter-select{
+  padding:6px 12px;border-radius:6px;border:1.5px solid rgba(44,36,24,.15);
+  font-family:'Source Serif 4',Georgia,serif;font-size:14px;background:#fff;color:#2C2418;
+}
+.diff-btn{padding:6px 12px!important;font-size:12px!important}
+.diff-btn.active-filter{background:rgba(44,36,24,.08);border-color:rgba(44,36,24,.3)}
+
+/* Quiz */
+.quiz-list{display:grid;gap:12px}
+.quiz-option{
+  border:1.5px solid rgba(44,36,24,.15);border-radius:8px;padding:14px 20px;
+  cursor:pointer;transition:all .2s;background:#fff;font-family:'Source Serif 4',Georgia,serif;
+  font-size:15px;text-align:left;width:100%;display:block;color:#2C2418;
+}
+.quiz-option:hover{border-color:rgba(44,36,24,.4);background:rgba(44,36,24,.03)}
+.quiz-option.selected{border-color:#4A6741;background:rgba(74,103,65,.06)}
+.quiz-option.correct{border-color:#4A6741;background:rgba(74,103,65,.1);cursor:default}
+.quiz-option.wrong{border-color:#8B3A3A;background:rgba(139,58,58,.06);cursor:default}
+.quiz-option.neutral-review{cursor:default}
+.quiz-option.neutral-review:hover{border-color:rgba(44,36,24,.15);background:#fff}
+.quiz-nav{display:flex;justify-content:space-between;margin-top:24px}
+.score-box{text-align:center;margin-bottom:32px;padding:24px;background:#fff;border-radius:12px;border:1px solid rgba(44,36,24,.1)}
+.score-num{font-size:48px;font-family:'Crimson Pro',Georgia,serif;font-weight:300}
+.result-card{margin-bottom:20px;padding:20px;background:#fff;border-radius:8px}
+.result-explain{font-size:13px;color:#7A6D5E;font-style:italic;padding-left:12px;border-left:2px solid rgba(44,36,24,.1);margin-top:12px}
+
+/* Theorems */
+.theorem-table{background:#fff;border-radius:12px;border:1px solid rgba(44,36,24,.1);overflow:hidden}
+.theorem-row{border-bottom:1px solid rgba(44,36,24,.08);padding:16px 24px;transition:background .2s}
+.theorem-row:last-child{border-bottom:none}
+.theorem-row:hover{background:rgba(44,36,24,.02)}
+.theorem-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
+.theorem-name{font-family:'Crimson Pro',Georgia,serif;font-size:17px;font-weight:600}
+.theorem-stmt{font-size:13px;color:#5C5247;margin-bottom:6px;font-family:'JetBrains Mono',monospace}
+.theorem-imp{font-size:13px;color:#8A7D6F;font-style:italic}
+.thm-filter-row{display:flex;gap:4px;flex-wrap:wrap}
+.thm-filter-btn{font-size:12px!important;padding:4px 12px!important}
+
+/* Concepts */
+.concept-card{background:#fff;border-radius:12px;border:1px solid rgba(44,36,24,.1);padding:28px;margin-bottom:24px}
+.concept-title{font-family:'Crimson Pro',Georgia,serif;font-size:22px;font-weight:600}
+.concept-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.concept-nodes{display:flex;flex-wrap:wrap;gap:8px}
+.concept-node{
+  display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;
+  font-size:13px;font-family:'Crimson Pro',Georgia,serif;background:#fff;
+  border:1px solid rgba(44,36,24,.15);
+}
+.concept-explain{margin-top:16px;padding-top:16px;border-top:1px solid rgba(44,36,24,.06);font-size:14px;color:#6B5D4F}
+.dep-chips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:20px}
+.dep-chip{padding:8px 16px;border-radius:8px;font-family:'Crimson Pro',Georgia,serif;font-size:14px;font-weight:600;text-align:center;min-width:90px}
+.dep-path{text-align:center;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#B0A89E}
+
+footer{border-top:1px solid rgba(44,36,24,.08);padding:20px 24px;text-align:center;margin-top:40px}
+footer p{color:#B0A89E;font-size:11px;font-family:'JetBrains Mono',monospace}
+
+.text-muted{color:#9B8E7E}
+.text-dim{color:#7A6D5E}
+.text-accent{color:#C4A265}
+.mt-4{margin-top:4px}
+.mt-8{margin-top:8px}
+.mt-16{margin-top:16px}
+.mt-20{margin-top:20px}
+.mb-8{margin-bottom:8px}
+.mb-16{margin-bottom:16px}
+.mb-24{margin-bottom:24px}
+.mb-32{margin-bottom:32px}
+.mb-40{margin-bottom:40px}
+.gap-20{gap:20px}
+.flex{display:flex}
+.flex-wrap{flex-wrap:wrap}
+.items-center{align-items:center}
+.justify-center{justify-content:center}
+.gap-8{gap:8px}
+.gap-12{gap:12px}
+.hidden{display:none}
+
+/* Exercises */
+.ex-card{background:#fff;border:1px solid rgba(44,36,24,.12);border-radius:8px;padding:18px 22px;margin-bottom:10px;position:relative;transition:all .2s}
+.ex-card:hover{border-color:rgba(44,36,24,.2)}
+.ex-card.completed{opacity:.6;border-left:3px solid #4A6741}
+.ex-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.ex-label{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;white-space:nowrap;flex-shrink:0}
+.ex-text{font-size:14.5px;line-height:1.65;white-space:pre-line;word-wrap:break-word;flex:1}
+.ex-actions{display:flex;gap:6px;margin-top:10px;align-items:center}
+.ex-check{width:20px;height:20px;border:2px solid rgba(44,36,24,.2);border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;background:#fff;font-size:12px;color:transparent}
+.ex-check:hover{border-color:rgba(44,36,24,.4)}
+.ex-check.done{background:#4A6741;border-color:#4A6741;color:#fff}
+.ex-section-header{font-family:'Crimson Pro',Georgia,serif;font-size:17px;font-weight:600;margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid rgba(44,36,24,.08);display:flex;justify-content:space-between;align-items:baseline}
+.ex-section-count{font-family:'JetBrains Mono',monospace;font-size:11px;color:#B0A89E}
+.ex-progress-mini{height:3px;background:rgba(44,36,24,.06);border-radius:2px;overflow:hidden;margin-top:4px;width:80px}
+.ex-progress-mini .fill{height:100%;background:#4A6741;border-radius:2px;transition:width .3s}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a class="logo" onclick="navigate('home')">
+      <span class="app-title logo-title">Spaces</span>
+      <span class="logo-sub">Study Guide</span>
+    </a>
+    <nav id="main-nav">
+      <button class="nav-btn active" data-view="home" onclick="navigate('home')">Chapters</button>
+      <button class="nav-btn" data-view="flashcards" onclick="navigate('flashcards')">Flashcards</button>
+      <button class="nav-btn" data-view="quiz" onclick="navigate('quiz')">Quizzes</button>
+      <button class="nav-btn" data-view="theorems" onclick="navigate('theorems')">Theorems</button>
+      <button class="nav-btn" data-view="exercises" onclick="navigate('exercises')">Exercises</button>
+      <button class="nav-btn" data-view="concepts" onclick="navigate('concepts')">Concepts</button>
+    </nav>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+</header>
+
+<main>
+  <!-- ═══ HOME ═══ -->
+  <div class="view active" id="view-home">
+    <div class="mb-40">
+      <h1 class="app-title" style="font-size:36px;font-weight:300;margin-bottom:8px">An Introduction to Real Analysis</h1>
+      <p class="text-dim" style="font-size:16px">Tom L. Lindstrøm · Interactive study companion</p>
+      <div class="flex flex-wrap gap-20 mt-16">
+        <span class="mono text-muted" id="home-card-count"></span>
+        <span class="mono text-muted" id="home-quiz-count"></span>
+        <span class="mono text-muted" id="home-thm-count"></span>
+        <span class="mono text-muted" id="home-ex-count"></span>
+        <span class="mono" style="color:#4A6741" id="home-mastered"></span>
+      </div>
+    </div>
+    <div class="chapters-grid" id="chapters-grid"></div>
+  </div>
+
+  <!-- ═══ FLASHCARDS ═══ -->
+  <div class="view" id="view-flashcards">
+    <div class="filter-row">
+      <div>
+        <h2 class="app-title" style="font-size:26px;font-weight:400">Flashcards</h2>
+        <p class="mono text-muted mt-4" id="fc-total"></p>
+      </div>
+      <div class="filter-controls">
+        <select class="filter-select" id="fc-chapter-filter" onchange="fcApplyFilters()">
+          <option value="">All Chapters</option>
+        </select>
+        <div class="flex gap-8">
+          <button class="btn-outline diff-btn active-filter" data-diff="" onclick="fcSetDifficulty(this,'')">All</button>
+          <button class="btn-outline diff-btn" data-diff="1" onclick="fcSetDifficulty(this,1)">●</button>
+          <button class="btn-outline diff-btn" data-diff="2" onclick="fcSetDifficulty(this,2)">●●</button>
+          <button class="btn-outline diff-btn" data-diff="3" onclick="fcSetDifficulty(this,3)">●●●</button>
+        </div>
+      </div>
+    </div>
+    <div id="fc-card-area"></div>
+    <div class="fc-controls" id="fc-controls"></div>
+  </div>
+
+  <!-- ═══ QUIZZES ═══ -->
+  <div class="view" id="view-quiz">
+    <h2 class="app-title mb-24" style="font-size:26px;font-weight:400">Quizzes</h2>
+    <div id="quiz-content"></div>
+  </div>
+
+  <!-- ═══ THEOREMS ═══ -->
+  <div class="view" id="view-theorems">
+    <div class="filter-row">
+      <h2 class="app-title" style="font-size:26px;font-weight:400">Key Theorems</h2>
+      <div class="thm-filter-row" id="thm-filters"></div>
+    </div>
+    <div class="theorem-table" id="theorem-table"></div>
+  </div>
+
+  <!-- ═══ EXERCISES ═══ -->
+  <div class="view" id="view-exercises">
+    <div class="filter-row">
+      <div>
+        <h2 class="app-title" style="font-size:26px;font-weight:400">Textbook Exercises</h2>
+        <p class="mono text-muted mt-4">326 pages of exercises rendered from the textbook — with full mathematical notation</p>
+      </div>
+      <div class="filter-controls">
+        <select class="filter-select" id="ex-chapter-filter" onchange="exSelectChapter()">
+          <option value="">Select Chapter</option>
+        </select>
+        <select class="filter-select" id="ex-section-filter" onchange="exSelectSection()">
+          <option value="">Select Section</option>
+        </select>
+      </div>
+    </div>
+    <div id="ex-section-grid"></div>
+    <div id="ex-viewer" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+        <div>
+          <span class="mono text-muted" id="ex-viewer-title" style="font-size:14px"></span>
+          <span class="mono" style="color:#B0A89E;font-size:12px;margin-left:12px" id="ex-viewer-pageinfo"></span>
+        </div>
+        <div class="flex gap-8">
+          <button class="btn-outline" style="font-size:13px" onclick="exViewerPrev()">← Prev page</button>
+          <button class="btn-outline" style="font-size:13px" onclick="exViewerNext()">Next page →</button>
+          <button class="btn-outline" style="font-size:13px" onclick="exCloseViewer()">✕ Close</button>
+        </div>
+      </div>
+      <div id="ex-viewer-img" style="text-align:center;background:#fff;border:1px solid rgba(44,36,24,.1);border-radius:8px;padding:12px;min-height:200px">
+        <img id="ex-page-img" style="max-width:100%;border-radius:4px" alt="Exercise page">
+      </div>
+      <div style="display:flex;justify-content:center;gap:8px;margin-top:16px" id="ex-page-dots"></div>
+    </div>
+  </div>
+
+  <!-- ═══ CONCEPTS ═══ -->
+  <div class="view" id="view-concepts">
+    <h2 class="app-title" style="font-size:26px;font-weight:400;margin-bottom:8px">Core Concepts</h2>
+    <p class="text-dim mb-32" style="font-size:15px">The four C's that unify the book: Completeness, Compactness, Convergence, and Continuity — seen from metric spaces, normed spaces, and measure theory.</p>
+    <div id="concepts-list"></div>
+    <div class="concept-card" style="margin-top:40px" id="dep-diagram">
+      <h3 style="font-family:'Crimson Pro',Georgia,serif;font-size:20px;font-weight:600;margin-bottom:16px">Chapter Dependencies</h3>
+      <p class="text-dim" style="font-size:14px;margin-bottom:20px">The backbone path: Ch 3 (Metric Spaces) → Ch 4 (Continuous Functions) → Ch 5 (Normed Spaces) → Ch 7 (Measure &amp; Integration). Two main tracks diverge from Ch 5: the differential calculus track (Ch 6) and the measure theory track (Ch 7 → 8 → 9).</p>
+      <div class="dep-chips" id="dep-chips"></div>
+      <p class="dep-path">3 → 4 → 5 → 6 (differential) &nbsp;|&nbsp; 3 → 4 → 5 → 7 → 8 → 9 (measure)</p>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p>Based on "Spaces: An Introduction to Real Analysis" by Tom L. Lindstrøm (AMS, 2017)</p>
+</footer>
+
+<script>
+// ════════════════════════════════════════════
+// DATA
+// ════════════════════════════════════════════
+const CHAPTERS=[{id:1,title:"Preliminaries",subtitle:"Proofs, Sets & Functions",color:"#4A6741",sections:["Proofs","Sets & Boolean Ops","Families of Sets","Functions","Relations & Partitions","Countability"]},{id:2,title:"Foundation of Calculus",subtitle:"Completeness & Key Theorems",color:"#8B5E3C",sections:["Epsilon-Delta","Completeness","Four Important Theorems"]},{id:3,title:"Metric Spaces",subtitle:"Convergence, Continuity & Compactness",color:"#2E5266",sections:["Definitions & Examples","Convergence & Continuity","Open & Closed Sets","Complete Spaces","Compact Sets","Alternative Compactness","Completion"]},{id:4,title:"Continuous Functions",subtitle:"Modes, Convergence & Applications",color:"#6B3A5B",sections:["Modes of Continuity","Modes of Convergence","Integrating & Differentiating Sequences","Power Series","Bounded Functions","Bounded Continuous Functions","Differential Equations","Compact Sets of Cont. Functions","DE Revisited","Polynomials Dense in C","Stone-Weierstrass"]},{id:5,title:"Normed Spaces",subtitle:"Linear Operators & Famous Theorems",color:"#1A4F5C",sections:["Normed Spaces","Infinite Sums & Bases","Inner Product Spaces","Linear Operators","Inverse Operators & Neumann Series","Baire's Category Theorem","Famous Theorems"]},{id:6,title:"Differential Calculus",subtitle:"In Normed Spaces",color:"#5C4033",sections:["The Derivative","Finding Derivatives","Mean Value Theorem","Riemann Integral","Taylor's Formula","Partial Derivatives","Inverse Function Thm","Implicit Function Thm","Differential Equations Again","Multilinear Maps","Higher Order Derivatives"]},{id:7,title:"Measure & Integration",subtitle:"Lebesgue Theory",color:"#3D5A3E",sections:["Measure Spaces","Complete Measures","Measurable Functions","Integration of Simple Functions","Integrals of Nonneg Functions","Integrable Functions","Spaces of Integrable Functions","Ways to Converge","Complex Functions"]},{id:8,title:"Constructing Measures",subtitle:"Outer Measure & Carathéodory",color:"#704214",sections:["Outer Measure","Measurable Sets","Carathéodory's Theorem","Lebesgue Measure on ℝ","Approximation Results","Coin Tossing Measure","Product Measures","Fubini's Theorem"]},{id:9,title:"Fourier Series",subtitle:"Convergence & Kernels",color:"#4A3B6B",sections:["Fourier Coefficients","Convergence in Mean Square","Dirichlet Kernel","Fejér Kernel","Riemann-Lebesgue Lemma","Dini's Test","Pointwise Divergence","Termwise Operations"]}];
+
+const FLASHCARDS=[
+{ch:1,q:"What is the contrapositive of 'If P then Q'?",a:"'If not Q then not P.' The contrapositive is logically equivalent to the original statement and is often easier to prove.",difficulty:1},
+{ch:1,q:"What does it mean for a set to be countable?",a:"A set A is countable if there exists a surjection f : ℕ → A, equivalently, if its elements can be listed as a₁, a₂, a₃, ... (the list may be finite or infinite).",difficulty:1},
+{ch:1,q:"State Cantor's Diagonal Argument (Theorem 1.6.4).",a:"The set ℝ of all real numbers is uncountable. Proof: Assume ℝ is listable as r₁, r₂, ... Write decimal expansions and construct a new number differing from rₙ in the n-th digit — a contradiction.",difficulty:2},
+{ch:1,q:"What are De Morgan's Laws for sets?",a:"For sets A₁, ..., Aₙ ⊆ B:\n• B \\ (A₁ ∪ ... ∪ Aₙ) = (B \\ A₁) ∩ ... ∩ (B \\ Aₙ)\n• B \\ (A₁ ∩ ... ∩ Aₙ) = (B \\ A₁) ∪ ... ∪ (B \\ Aₙ)",difficulty:1},
+{ch:1,q:"When is a function f : X → Y bijective?",a:"When f is both injective (one-to-one: f(x₁) = f(x₂) ⟹ x₁ = x₂) and surjective (onto: for every y ∈ Y there exists x ∈ X with f(x) = y).",difficulty:1},
+{ch:1,q:"Is ℚ countable? How do you prove it?",a:"Yes. ℤ × ℕ is countable (by Proposition 1.6.1), and the map (p, q) ↦ p/q from ℤ × ℕ to ℚ is surjective, so ℚ is countable.",difficulty:2},
+{ch:2,q:"State the Completeness Principle for ℝ.",a:"Every nonempty subset of ℝ that is bounded above has a least upper bound (supremum) in ℝ. Equivalently, every nonempty set bounded below has a greatest lower bound (infimum).",difficulty:1},
+{ch:2,q:"What is a Cauchy sequence?",a:"A sequence {xₙ} in ℝᵐ is Cauchy if for every ε > 0, there exists N ∈ ℕ such that ‖xₙ - xₘ‖ < ε for all n, m ≥ N.",difficulty:1},
+{ch:2,q:"Completeness of ℝᵐ (Theorem 2.2.5): State and explain.",a:"A sequence {xₙ} in ℝᵐ converges if and only if it is a Cauchy sequence. This connects an 'internal' property (terms getting close to each other) with convergence to a limit.",difficulty:2},
+{ch:2,q:"State the Intermediate Value Theorem.",a:"If f : [a,b] → ℝ is continuous and f(a) and f(b) have opposite signs, there exists c ∈ (a,b) such that f(c) = 0.",difficulty:1},
+{ch:2,q:"State the Bolzano-Weierstrass Theorem.",a:"Every bounded sequence in ℝᵐ has a convergent subsequence.",difficulty:1},
+{ch:2,q:"State the Extreme Value Theorem.",a:"If f : [a,b] → ℝ is continuous on the closed, bounded interval [a,b], then f attains its maximum and minimum values — there exist points c, d ∈ [a,b] with f(c) = max f and f(d) = min f.",difficulty:2},
+{ch:2,q:"What are lim sup and lim inf?",a:"For a sequence {aₙ}, let Mₙ = sup{aₖ : k ≥ n} and mₙ = inf{aₖ : k ≥ n}. Then:\nlim sup aₙ = lim Mₙ = inf Mₙ\nlim inf aₙ = lim mₙ = sup mₙ\nThe sequence converges iff lim sup = lim inf.",difficulty:2},
+{ch:2,q:"State the Mean Value Theorem.",a:"If f : [a,b] → ℝ is continuous on [a,b] and differentiable on (a,b), then there exists c ∈ (a,b) with f'(c) = (f(b) - f(a))/(b - a).",difficulty:1},
+{ch:3,q:"What is a metric space?",a:"A set X together with a function d : X × X → [0,∞) satisfying:\n1. d(x,y) = 0 ⟺ x = y\n2. d(x,y) = d(y,x) (symmetry)\n3. d(x,z) ≤ d(x,y) + d(y,z) (triangle inequality)",difficulty:1},
+{ch:3,q:"Give three examples of metric spaces.",a:"1. (ℝⁿ, ‖·‖₂) — Euclidean distance\n2. (C[a,b], d∞) where d∞(f,g) = sup|f(x)-g(x)| — sup metric on continuous functions\n3. Discrete metric: d(x,y) = 1 if x ≠ y, 0 if x = y",difficulty:1},
+{ch:3,q:"Define 'open set' in a metric space.",a:"A set U ⊆ X is open if for every x ∈ U, there exists r > 0 such that B(x; r) ⊆ U, where B(x; r) = {y ∈ X : d(x,y) < r} is the open ball.",difficulty:1},
+{ch:3,q:"Define 'closed set' in a metric space.",a:"A set F ⊆ X is closed if its complement X \\ F is open. Equivalently, F contains all its limit points, or: whenever {xₙ} ⊆ F converges to a, then a ∈ F.",difficulty:1},
+{ch:3,q:"What does it mean for a metric space to be complete?",a:"A metric space (X, d) is complete if every Cauchy sequence in X converges to a limit in X. Examples: ℝⁿ is complete; ℚ is not.",difficulty:1},
+{ch:3,q:"State Banach's Fixed Point Theorem.",a:"If (X, d) is a complete metric space and f : X → X is a contraction (∃c < 1: d(f(x),f(y)) ≤ c·d(x,y) ∀x,y), then f has a unique fixed point x* = f(x*). Moreover, iterating from any x₀, the sequence xₙ₊₁ = f(xₙ) converges to x*.",difficulty:2},
+{ch:3,q:"What does it mean for a set K to be compact in a metric space?",a:"K is compact if every sequence in K has a subsequence converging to a point in K (sequential compactness). Equivalently, every open cover of K has a finite subcover.",difficulty:2},
+{ch:3,q:"In ℝⁿ, when is a set compact?",a:"A subset of ℝⁿ is compact if and only if it is closed and bounded (Heine-Borel / Corollary 3.5.5).",difficulty:1},
+{ch:3,q:"Relate continuity to open sets (Prop 3.3.10).",a:"A function f : X → Y between metric spaces is continuous if and only if f⁻¹(V) is open in X for every open set V in Y.",difficulty:2},
+{ch:3,q:"What is the completion of a metric space?",a:"For any metric space (X, d), there exists a complete metric space (X̄, d̄) and an isometric embedding i : X → X̄ such that i(X) is dense in X̄. It is unique up to isometry.",difficulty:3},
+{ch:4,q:"What is uniform continuity?",a:"f : X → Y is uniformly continuous if for every ε > 0, there exists δ > 0 such that d_Y(f(x), f(y)) < ε whenever d_X(x, y) < δ. The key: δ works for ALL x simultaneously, not just one point.",difficulty:1},
+{ch:4,q:"What is Lipschitz continuity?",a:"f : X → Y is Lipschitz continuous if there exists L ≥ 0 such that d_Y(f(x), f(y)) ≤ L · d_X(x, y) for all x, y. Lipschitz ⟹ uniform continuity ⟹ continuity, but not conversely.",difficulty:2},
+{ch:4,q:"What is uniform convergence? Why does it matter?",a:"A sequence fₙ → f uniformly if sup_x |fₙ(x) - f(x)| → 0. It matters because: (1) uniform limit of continuous functions is continuous, (2) you can swap limit and integral, (3) under conditions, swap limit and derivative.",difficulty:2},
+{ch:4,q:"Distinguish pointwise vs. uniform convergence.",a:"Pointwise: ∀x ∀ε ∃N: |fₙ(x)-f(x)| < ε for n ≥ N (N depends on x and ε).\nUniform: ∀ε ∃N ∀x: |fₙ(x)-f(x)| < ε for n ≥ N (N depends only on ε).\nUniform ⟹ pointwise, not conversely.",difficulty:2},
+{ch:4,q:"State the Stone-Weierstrass Theorem.",a:"Let X be a compact metric space. If A ⊆ C(X) is a subalgebra that separates points and vanishes nowhere, then A is dense in C(X) with the sup norm. Special case (Weierstrass): polynomials are dense in C[a,b].",difficulty:3},
+{ch:4,q:"State the Arzelà-Ascoli Theorem.",a:"A subset F of C(K) (K compact) is relatively compact (has compact closure) in the sup-norm if and only if F is bounded and equicontinuous.",difficulty:3},
+{ch:5,q:"What is a normed space?",a:"A vector space V with a function ‖·‖ : V → [0,∞) satisfying:\n1. ‖x‖ = 0 ⟺ x = 0\n2. ‖αx‖ = |α|·‖x‖\n3. ‖x+y‖ ≤ ‖x‖ + ‖y‖\nEvery normed space is a metric space via d(x,y) = ‖x-y‖.",difficulty:1},
+{ch:5,q:"What is a Banach space?",a:"A complete normed space — i.e., a normed space in which every Cauchy sequence converges.",difficulty:1},
+{ch:5,q:"What is a Hilbert space?",a:"A complete inner product space. The inner product ⟨·,·⟩ induces a norm ‖x‖ = √⟨x,x⟩, and the space is complete with respect to this norm.",difficulty:2},
+{ch:5,q:"State the Cauchy-Schwarz Inequality.",a:"|⟨x, y⟩| ≤ ‖x‖ · ‖y‖ for all x, y in an inner product space. Equality holds iff x and y are linearly dependent.",difficulty:1},
+{ch:5,q:"When is a linear operator T : X → Y bounded?",a:"When there exists C ≥ 0 such that ‖Tx‖ ≤ C‖x‖ for all x. For linear operators, bounded ⟺ continuous. The operator norm is ‖T‖ = sup{‖Tx‖ : ‖x‖ ≤ 1}.",difficulty:2},
+{ch:5,q:"State Baire's Category Theorem.",a:"In a complete metric space, the intersection of countably many dense open sets is dense. Equivalently, a complete metric space cannot be written as a countable union of nowhere-dense sets.",difficulty:3},
+{ch:5,q:"What is the Open Mapping Theorem?",a:"If T : X → Y is a bounded, surjective linear operator between Banach spaces, then T maps open sets to open sets.",difficulty:3},
+{ch:5,q:"State the Neumann Series result.",a:"If T is a bounded linear operator on a Banach space with ‖T‖ < 1, then (I - T) is invertible and (I - T)⁻¹ = Σₙ₌₀^∞ Tⁿ.",difficulty:3},
+{ch:6,q:"How is the derivative defined in normed spaces?",a:"f : U → Y (U open in X) is differentiable at a ∈ U if there exists a bounded linear operator T : X → Y such that lim_{h→0} ‖f(a+h) - f(a) - Th‖/‖h‖ = 0. We write f'(a) = T.",difficulty:2},
+{ch:6,q:"What is the Fréchet derivative?",a:"The derivative of f at a in the normed space setting: a bounded linear map T = f'(a) ∈ L(X,Y) that best linearly approximates f near a. It generalizes the Jacobian matrix from ℝⁿ to general normed spaces.",difficulty:2},
+{ch:6,q:"State the Inverse Function Theorem (normed spaces).",a:"If f : U → Y is C¹ and f'(a) is an invertible linear operator, then f is a local diffeomorphism near a — there exist neighborhoods of a and f(a) on which f has a C¹ inverse.",difficulty:3},
+{ch:6,q:"State the Implicit Function Theorem.",a:"If F(x,y) = 0, F is C¹, and ∂F/∂y is invertible at (a,b), then near (a,b), the equation F(x,y) = 0 defines y as a C¹ function of x: y = g(x).",difficulty:3},
+{ch:6,q:"How does the Chain Rule work in normed spaces?",a:"If f is differentiable at a and g is differentiable at f(a), then g ∘ f is differentiable at a and (g ∘ f)'(a) = g'(f(a)) ∘ f'(a) — composition of linear operators.",difficulty:2},
+{ch:7,q:"What is a σ-algebra?",a:"A collection M of subsets of X that: (1) contains X, (2) is closed under complements, (3) is closed under countable unions. The pair (X, M) is called a measurable space.",difficulty:1},
+{ch:7,q:"What is a measure?",a:"A function μ : M → [0, ∞] on a σ-algebra satisfying: (1) μ(∅) = 0, (2) countable additivity: if {Aₙ} are pairwise disjoint measurable sets, then μ(⋃Aₙ) = Σμ(Aₙ).",difficulty:1},
+{ch:7,q:"What is a simple function?",a:"A measurable function that takes only finitely many values: φ = Σᵢ₌₁ⁿ aᵢ · χ_{Aᵢ} where Aᵢ are measurable sets. Simple functions are used to build the Lebesgue integral.",difficulty:1},
+{ch:7,q:"State the Monotone Convergence Theorem.",a:"If {fₙ} is an increasing sequence of nonneg measurable functions with fₙ → f pointwise, then ∫f dμ = lim ∫fₙ dμ. (You can swap limit and integral for increasing sequences.)",difficulty:2},
+{ch:7,q:"State Fatou's Lemma.",a:"If {fₙ} are nonneg measurable functions, then ∫(lim inf fₙ) dμ ≤ lim inf ∫fₙ dμ. (The integral of the limit is at most the limit of the integrals.)",difficulty:2},
+{ch:7,q:"State the Dominated Convergence Theorem.",a:"If fₙ → f pointwise a.e., and |fₙ| ≤ g for some integrable g, then f is integrable and ∫f dμ = lim ∫fₙ dμ. The dominating function g is key!",difficulty:2},
+{ch:7,q:"What is the Lᵖ space?",a:"Lᵖ(X, μ) = {measurable f : ∫|f|ᵖ dμ < ∞}, with norm ‖f‖ₚ = (∫|f|ᵖ dμ)^{1/p}. Functions equal a.e. are identified. The Riesz-Fischer theorem: Lᵖ is complete (a Banach space).",difficulty:2},
+{ch:8,q:"What is an outer measure?",a:"A function μ* : P(X) → [0,∞] defined on ALL subsets, satisfying: (1) μ*(∅) = 0, (2) A ⊆ B ⟹ μ*(A) ≤ μ*(B), (3) μ*(⋃Aₙ) ≤ Σμ*(Aₙ) (countable subadditivity).",difficulty:2},
+{ch:8,q:"State Carathéodory's Theorem.",a:"Given an outer measure μ* on X, the collection of Carathéodory-measurable sets (A such that μ*(E) = μ*(E∩A) + μ*(E\\A) for all E) forms a σ-algebra, and μ* restricted to it is a complete measure.",difficulty:3},
+{ch:8,q:"How is Lebesgue measure constructed on ℝ?",a:"Start with lengths of intervals: λ((a,b)) = b-a. Define outer measure λ*(A) = inf{Σ(bₙ-aₙ) : A ⊆ ⋃(aₙ,bₙ)}. Apply Carathéodory's theorem to get Lebesgue-measurable sets and Lebesgue measure.",difficulty:2},
+{ch:8,q:"State Fubini's Theorem.",a:"If f is integrable on the product space X × Y (with product measure), then ∫∫f d(μ×ν) = ∫(∫f(x,y) dν(y)) dμ(x) = ∫(∫f(x,y) dμ(x)) dν(y). The order of integration can be swapped.",difficulty:2},
+{ch:9,q:"What are Fourier coefficients?",a:"For f ∈ L¹([−π, π]), the n-th Fourier coefficient is f̂(n) = (1/2π)∫f(x)e^{-inx} dx. The Fourier series is Σf̂(n)e^{inx}.",difficulty:1},
+{ch:9,q:"State the L² convergence of Fourier series.",a:"If f ∈ L²([−π,π]), then the partial sums Sₙf converge to f in the L² norm: ‖f - Sₙf‖₂ → 0. This is the Riesz-Fischer theorem for Fourier series.",difficulty:2},
+{ch:9,q:"What is the Dirichlet kernel?",a:"Dₙ(x) = Σₖ₌₋ₙⁿ eⁱᵏˣ = sin((n+½)x) / sin(x/2). The partial sum of the Fourier series is Sₙf = f * Dₙ (convolution). The Dirichlet kernel is NOT a good kernel (not nonneg, integral grows).",difficulty:2},
+{ch:9,q:"What is the Fejér kernel and Fejér's Theorem?",a:"Fejér kernel: Fₙ = (1/n)Σₖ₌₀ⁿ⁻¹ Dₖ = (1/n)(sin(nx/2)/sin(x/2))². It IS a good kernel. Fejér's Theorem: the Cesàro means σₙf = f * Fₙ converge to f uniformly for continuous f.",difficulty:3},
+{ch:9,q:"State the Riemann-Lebesgue Lemma.",a:"If f ∈ L¹([−π,π]), then f̂(n) → 0 as |n| → ∞. In words: the Fourier coefficients of an integrable function decay to zero.",difficulty:2},
+{ch:9,q:"State Parseval's Identity.",a:"For f ∈ L²([−π,π]): ‖f‖₂² = (1/2π)∫|f|² dx = Σₙ |f̂(n)|². The L² norm equals the ℓ² norm of the Fourier coefficients — energy is preserved.",difficulty:2},
+{ch:9,q:"What is Dini's Test?",a:"If f ∈ L¹ and the function g(t) = (f(x₀+t) + f(x₀-t) - 2s)/t is integrable near 0, then Sₙf(x₀) → s. This gives a sufficient condition for pointwise convergence of Fourier series.",difficulty:3}
+];
+
+const QUIZZES=[
+{ch:[1,2],title:"Foundations & Calculus",questions:[
+{q:"Which of these is NOT a property required of a metric?",opts:["d(x,y) ≥ 0","d(x,y) = d(y,x)","d(x,y) · d(y,z) ≤ d(x,z)","d(x,x) = 0"],correct:2,explain:"Metrics require the triangle inequality d(x,z) ≤ d(x,y) + d(y,z) with addition, not multiplication."},
+{q:"ℚ is:",opts:["Uncountable","Countable and complete","Countable but not complete","Neither countable nor complete"],correct:2,explain:"ℚ is countable (Prop 1.6.3), but not complete: e.g., a sequence of rationals approaching √2 is Cauchy but doesn't converge in ℚ."},
+{q:"The Completeness Principle states that every nonempty subset of ℝ bounded above has a:",opts:["Maximum","Limit point","Supremum in ℝ","Cauchy subsequence"],correct:2,explain:"The least upper bound (supremum) exists in ℝ. It need not be a maximum (the set may not contain its sup)."},
+{q:"A sequence is Cauchy if:",opts:["It is bounded","It converges","Terms eventually get arbitrarily close to each other","It has a convergent subsequence"],correct:2,explain:"∀ε > 0 ∃N: d(xₙ,xₘ) < ε for n,m ≥ N. In ℝᵐ, Cauchy ⟺ convergent (completeness)."}
+]},
+{ch:[3],title:"Metric Spaces",questions:[
+{q:"In a metric space, an open ball B(a; r) is:",opts:["Always an open set","Always a closed set","Both open and closed","Neither open nor closed"],correct:0,explain:"Open balls are always open sets (Lemma 3.3.6): for any x ∈ B(a;r), the ball B(x; r-d(x,a)) is contained in B(a;r)."},
+{q:"A closed subset of a compact set is:",opts:["Open","Compact","Complete but not compact","Bounded but not closed"],correct:1,explain:"Proposition 3.5.8: A closed subset F of a compact set K is compact."},
+{q:"Banach's Fixed Point Theorem requires:",opts:["A compact metric space","A complete metric space + contraction","An open set + continuous map","A Hilbert space"],correct:1,explain:"The theorem needs completeness (to guarantee convergence of iterates) and a contraction mapping (factor c < 1)."},
+{q:"A continuous image of a compact set is:",opts:["Open","Closed","Compact","Complete"],correct:2,explain:"Proposition 3.5.9: continuous functions preserve compactness."}
+]},
+{ch:[5],title:"Normed Spaces",questions:[
+{q:"For linear operators between normed spaces, bounded is equivalent to:",opts:["Surjective","Injective","Continuous","Compact"],correct:2,explain:"A fundamental result: for linear maps, boundedness (‖Tx‖ ≤ C‖x‖) is equivalent to continuity."},
+{q:"A Banach space is:",opts:["A metric space","A complete normed space","A compact normed space","A finite-dimensional vector space"],correct:1,explain:"Banach = normed + complete. All finite-dimensional normed spaces are Banach, but infinite-dimensional ones need not be."},
+{q:"Baire's Category Theorem says a complete metric space:",opts:["Is compact","Is separable","Cannot be a countable union of nowhere-dense sets","Has a countable dense subset"],correct:2,explain:"Complete metric spaces are 'too big' to be meager (first category). This has powerful consequences like the Uniform Boundedness Principle."}
+]},
+{ch:[7,8],title:"Measure & Integration",questions:[
+{q:"A σ-algebra must be closed under:",opts:["Finite unions only","Countable unions","Arbitrary unions","None of the above"],correct:1,explain:"σ-algebras are closed under complements and countable unions (hence also countable intersections via De Morgan)."},
+{q:"The Dominated Convergence Theorem requires:",opts:["Uniform convergence","Monotone convergence","An integrable dominating function","Compact support"],correct:2,explain:"DCT: if fₙ → f pointwise a.e. and |fₙ| ≤ g with g integrable, then ∫fₙ → ∫f."},
+{q:"Lebesgue measure on ℝ is constructed using:",opts:["Inner measure","Riemann sums","Carathéodory's theorem with outer measure from interval lengths","Probability axioms"],correct:2,explain:"Define outer measure from coverings by intervals, then apply Carathéodory's theorem to get a complete measure."},
+{q:"Fubini's Theorem allows you to:",opts:["Differentiate under the integral","Swap order of integration","Integrate over non-measurable sets","Extend measures to larger σ-algebras"],correct:1,explain:"For integrable f on a product space, the iterated integrals exist and equal the double integral."}
+]},
+{ch:[9],title:"Fourier Series",questions:[
+{q:"The Fourier series of f ∈ L² converges to f in:",opts:["Pointwise sense","Uniform sense","L² norm","L∞ norm"],correct:2,explain:"L² convergence is guaranteed (Riesz-Fischer). Pointwise convergence requires additional conditions (e.g., Dini's test)."},
+{q:"The Riemann-Lebesgue Lemma says:",opts:["f̂(n) → 0 as |n| → ∞ for f ∈ L¹","Fourier series converge pointwise","f̂(n) = 0 for all n iff f = 0","The Fourier transform is invertible"],correct:0,explain:"The Fourier coefficients of any integrable function decay to zero — a fundamental result in harmonic analysis."},
+{q:"The Fejér kernel is preferred over the Dirichlet kernel because:",opts:["It's a 'good kernel' (nonnegative, integrates to 1)","It has smaller support","It's smoother","It gives exact Fourier partial sums"],correct:0,explain:"The Fejér kernel is nonneg and forms a good kernel, giving uniform convergence of Cesàro means for continuous functions, unlike the Dirichlet kernel."}
+]}
+];
+
+const KEY_THEOREMS=[
+{name:"Banach Fixed Point",ch:3,statement:"Complete metric space + contraction → unique fixed point",importance:"Foundation for existence/uniqueness of solutions to differential equations"},
+{name:"Arzelà-Ascoli",ch:4,statement:"F ⊆ C(K) relatively compact ⟺ bounded + equicontinuous",importance:"Characterizes compactness in function spaces — used in PDE existence proofs"},
+{name:"Stone-Weierstrass",ch:4,statement:"Subalgebra separating points + vanishing nowhere → dense in C(X)",importance:"Generalization of Weierstrass approximation; polynomials approximate continuous functions"},
+{name:"Baire Category",ch:5,statement:"Complete metric space ≠ countable union of nowhere-dense sets",importance:"Proves existence results: Uniform Boundedness, Open Mapping, continuous nowhere-differentiable functions"},
+{name:"Open Mapping",ch:5,statement:"Surjective bounded linear operator between Banach spaces maps open sets to open sets",importance:"Key tool in functional analysis, implies Bounded Inverse Theorem"},
+{name:"Inverse Function",ch:6,statement:"f'(a) invertible ⟹ f is local diffeomorphism",importance:"Nonlinear problems can be locally inverted when linearization is invertible"},
+{name:"Implicit Function",ch:6,statement:"F(x,y)=0, ∂F/∂y invertible ⟹ y = g(x) locally",importance:"Solves equations implicitly — central tool in differential geometry and optimization"},
+{name:"Monotone Convergence",ch:7,statement:"0 ≤ fₙ ↑ f ⟹ ∫fₙ ↑ ∫f",importance:"First fundamental convergence theorem for Lebesgue integrals"},
+{name:"Dominated Convergence",ch:7,statement:"fₙ → f a.e., |fₙ| ≤ g integrable ⟹ ∫fₙ → ∫f",importance:"The workhorse of measure theory — swap limits and integrals with a dominating function"},
+{name:"Carathéodory Extension",ch:8,statement:"Outer measure → σ-algebra of measurable sets + complete measure",importance:"The machine that constructs Lebesgue measure and probability measures"},
+{name:"Fubini",ch:8,statement:"f integrable on product ⟹ iterated integrals exist and are equal",importance:"Compute double integrals as iterated integrals — essential in probability and PDE"},
+{name:"Fejér",ch:9,statement:"Cesàro means of Fourier series converge uniformly for continuous f",importance:"Constructive approximation result, stronger than pointwise Fourier convergence"}
+];
+
+const CONCEPT_MAP={
+"Completeness":{ch:2,connects:["Cauchy Sequences","Banach Spaces","Compact Sets","Baire Category"],explain:"Every Cauchy sequence converges. First met in ℝ (Ch 2), then generalized to metric spaces (Ch 3), normed/Banach spaces (Ch 5), and Lᵖ spaces (Ch 7). Completeness is what makes analysis 'work' — without it, we can't take limits."},
+"Compactness":{ch:3,connects:["Closed + Bounded (ℝⁿ)","Sequential Compactness","Open Cover Compactness","Arzelà-Ascoli","Extreme Value Thm"],explain:"The generalization of 'closed and bounded' to abstract spaces. Sequential compactness (every sequence has convergent subsequence) equals open-cover compactness in metric spaces. It ensures extrema exist, continuous functions are uniform, and operators are 'nice'."},
+"Continuity":{ch:3,connects:["Open Set Characterization","Uniform Continuity","Lipschitz","Bounded Linear Operators","Differentiability"],explain:"Preserved by open sets (preimage characterization, Ch 3), strengthened to uniform and Lipschitz (Ch 4), equivalent to boundedness for linear operators (Ch 5), and generalized via ε-δ to differentiability in normed spaces (Ch 6)."},
+"Convergence":{ch:4,connects:["Pointwise","Uniform","Lᵖ Convergence","a.e. Convergence","Fourier Series"],explain:"Pointwise → uniform → Lᵖ: different modes with different consequences. Uniform convergence preserves continuity and allows limit-integral swap. Dominated convergence (Ch 7) is the most powerful tool. Fourier series converge in L² but not always pointwise."}
+};
+
+// ════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════
+let currentView = 'home';
+let fcIndex = 0;
+let fcFlipped = false;
+let fcChapterFilter = '';
+let fcDiffFilter = '';
+let fcFiltered = [...FLASHCARDS];
+let knownCards = {};
+let quizActive = false;
+let quizIdx = 0;
+let quizQ = 0;
+let quizAnswers = {};
+let quizSubmitted = false;
+let thmFilter = null;
+
+// ═══ EXERCISES DATA (512 exercises from textbook) ═══
+const EX_SEC_PAGES={
+"1.1":{"f":"1_1","p":3},"1.2":{"f":"1_2","p":1},"1.3":{"f":"1_3","p":4},"1.4":{"f":"1_4","p":3},"1.5":{"f":"1_5","p":3},"1.6":{"f":"1_6","p":7},
+"2.1":{"f":"2_1","p":7},"2.2":{"f":"2_2","p":5},"2.3":{"f":"2_3","p":6},
+"3.1":{"f":"3_1","p":4},"3.2":{"f":"3_2","p":7},"3.3":{"f":"3_3","p":4},"3.4":{"f":"3_4","p":7},
+"4.1":{"f":"4_1","p":5},"4.2":{"f":"4_2","p":6},"4.3":{"f":"4_3","p":6},"4.4":{"f":"4_4","p":3},"4.5":{"f":"4_5","p":2},"4.6":{"f":"4_6","p":4},"4.7":{"f":"4_7","p":5},"4.8":{"f":"4_8","p":5},"4.9":{"f":"4_9","p":6},"4.10":{"f":"4_10","p":7},"4.11":{"f":"4_11","p":7},
+"5.1":{"f":"5_1","p":2},"5.2":{"f":"5_2","p":7},"5.3":{"f":"5_3","p":5},"5.4":{"f":"5_4","p":6},"5.5":{"f":"5_5","p":6},"5.6":{"f":"5_6","p":3},"5.7":{"f":"5_7","p":7},
+"6.1":{"f":"6_1","p":4},"6.2":{"f":"6_2","p":4},"6.3":{"f":"6_3","p":5},"6.4":{"f":"6_4","p":6},"6.5":{"f":"6_5","p":5},"6.6":{"f":"6_6","p":6},"6.7":{"f":"6_7","p":4},"6.8":{"f":"6_8","p":7},"6.9":{"f":"6_9","p":5},"6.10":{"f":"6_10","p":6},"6.11":{"f":"6_11","p":7},
+"7.1":{"f":"7_1","p":5},"7.2":{"f":"7_2","p":5},"7.3":{"f":"7_3","p":6},"7.4":{"f":"7_4","p":7},"7.5":{"f":"7_5","p":6},"7.6":{"f":"7_6","p":7},"7.7":{"f":"7_7","p":4},"7.8":{"f":"7_8","p":3},"7.9":{"f":"7_9","p":3},
+"8.1":{"f":"8_1","p":4},"8.2":{"f":"8_2","p":6},"8.3":{"f":"8_3","p":4},"8.4":{"f":"8_4","p":3},"8.5":{"f":"8_5","p":2},"8.6":{"f":"8_6","p":4},"8.7":{"f":"8_7","p":6},"8.8":{"f":"8_8","p":7},
+"9.1":{"f":"9_1","p":5},"9.2":{"f":"9_2","p":5},"9.3":{"f":"9_3","p":5},"9.4":{"f":"9_4","p":2},"9.5":{"f":"9_5","p":5},"9.6":{"f":"9_6","p":3},"9.7":{"f":"9_7","p":2},"9.8":{"f":"9_8","p":5}
+};
+const EX_TOTAL_PAGES=326;
+
+
+// ════════════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════════════
+let exChFilter = '';
+let exSecFilter = '';
+// ════════════════════════════════════════════
+function navigate(view) {
+  currentView = view;
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + view).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.view === view);
+  });
+  if (view === 'flashcards') { fcApplyFilters(); }
+  if (view === 'quiz' && !quizActive) { renderQuizList(); }
+  if (view === 'theorems') { renderTheorems(); }
+  if (view === 'concepts') { renderConcepts(); }
+  if (view === 'exercises') { exInit(); exApplyFilters(); }
+  updateProgress();
+}
+
+function updateProgress() {
+  const cardsDone = Object.keys(knownCards).length;
+  const pct = (cardsDone / FLASHCARDS.length) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('home-mastered').textContent = cardsDone + ' cards mastered';
+}
+
+// ════════════════════════════════════════════
+// HOME
+// ════════════════════════════════════════════
+function renderHome() {
+  document.getElementById('home-card-count').textContent = FLASHCARDS.length + ' flashcards';
+  document.getElementById('home-quiz-count').textContent = QUIZZES.length + ' quizzes';
+  document.getElementById('home-thm-count').textContent = KEY_THEOREMS.length + ' key theorems';
+  document.getElementById('home-ex-count').textContent = EX_TOTAL_PAGES + ' exercise pages';
+  updateProgress();
+
+  const grid = document.getElementById('chapters-grid');
+  grid.innerHTML = CHAPTERS.map(ch => {
+    const chCards = FLASHCARDS.filter(c => c.ch === ch.id);
+    const chKnown = chCards.filter(c => knownCards[cardKey(c)]).length;
+    const tags = ch.sections.slice(0, 4).map(s =>
+      `<span class="ch-tag" style="background:${ch.color}10;color:${ch.color}">${s}</span>`
+    ).join('') + (ch.sections.length > 4 ? `<span style="font-size:11px;color:#B0A89E;font-family:'JetBrains Mono',monospace">+${ch.sections.length - 4}</span>` : '');
+    return `<div class="chapter-card" onclick="openChapter(${ch.id})">
+      <div class="accent-bar" style="background:${ch.color}"></div>
+      <div class="ch-header">
+        <span class="mono" style="color:${ch.color};font-size:13px;font-weight:500">CH ${ch.id}</span>
+        <span class="mono" style="color:#B0A89E;font-size:11px">${chKnown}/${chCards.length}</span>
+      </div>
+      <div class="ch-title">${ch.title}</div>
+      <div class="ch-subtitle">${ch.subtitle}</div>
+      <div class="ch-tags">${tags}</div>
+    </div>`;
+  }).join('');
+}
+
+function openChapter(id) {
+  fcChapterFilter = id;
+  document.getElementById('fc-chapter-filter').value = id;
+  navigate('flashcards');
+}
+
+function cardKey(c) { return c.ch + '-' + c.q.slice(0, 20); }
+
+// ════════════════════════════════════════════
+// FLASHCARDS
+// ════════════════════════════════════════════
+function fcApplyFilters() {
+  const chVal = document.getElementById('fc-chapter-filter').value;
+  fcChapterFilter = chVal ? Number(chVal) : '';
+  fcFiltered = FLASHCARDS.filter(c => {
+    if (fcChapterFilter && c.ch !== fcChapterFilter) return false;
+    if (fcDiffFilter && c.difficulty !== fcDiffFilter) return false;
+    return true;
+  });
+  fcIndex = 0;
+  fcFlipped = false;
+  document.getElementById('fc-total').textContent = fcFiltered.length + ' cards';
+  renderFlashcard();
+}
+
+function fcSetDifficulty(btn, val) {
+  fcDiffFilter = val;
+  document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active-filter'));
+  btn.classList.add('active-filter');
+  fcApplyFilters();
+}
+
+function renderFlashcard() {
+  const area = document.getElementById('fc-card-area');
+  const controls = document.getElementById('fc-controls');
+  if (!fcFiltered.length) {
+    area.innerHTML = '<div style="text-align:center;padding:60px;color:#9B8E7E"><p>No cards match your filters.</p></div>';
+    controls.innerHTML = '';
+    return;
+  }
+  const card = fcFiltered[fcIndex];
+  const ch = CHAPTERS[card.ch - 1];
+  const dots = [1,2,3].map(d => `<span class="difficulty-dot ${d <= card.difficulty ? 'on' : 'off'}"></span>`).join('');
+
+  area.innerHTML = `<div class="flashcard-container" onclick="flipCard()">
+    <div class="fc-meta">
+      <span class="pill" style="background:${ch.color}15;color:${ch.color}">Ch ${card.ch}</span>
+      <span class="difficulty-dots">${dots}</span>
+    </div>
+    <div class="fc-counter"><span class="mono" style="color:#B0A89E;font-size:12px">${fcIndex + 1} / ${fcFiltered.length}</span></div>
+    <div class="fc-body" style="animation:fadeIn .25s ease">
+      ${!fcFlipped
+        ? `<p style="font-size:18px;line-height:1.6">${esc(card.q)}</p><p class="fc-hint">tap to reveal</p>`
+        : `<p class="fc-answer">${esc(card.a)}</p>`
+      }
+    </div>
+  </div>`;
+
+  let btns = `<button class="btn-outline" onclick="fcPrev()" ${fcIndex === 0 ? 'disabled' : ''}>← Previous</button>`;
+  if (fcFlipped) {
+    btns += `<button class="btn-outline btn-red-outline" onclick="fcMark(false)">Still learning</button>`;
+    btns += `<button class="btn-primary btn-green" onclick="fcMark(true)">✓ Got it</button>`;
+  }
+  btns += `<button class="btn-outline" onclick="fcNext()" ${fcIndex === fcFiltered.length - 1 ? 'disabled' : ''}>Next →</button>`;
+  controls.innerHTML = btns;
+}
+
+function flipCard() { fcFlipped = !fcFlipped; renderFlashcard(); }
+function fcPrev() { if (fcIndex > 0) { fcIndex--; fcFlipped = false; renderFlashcard(); } }
+function fcNext() { if (fcIndex < fcFiltered.length - 1) { fcIndex++; fcFlipped = false; renderFlashcard(); } }
+function fcMark(known) {
+  const key = cardKey(fcFiltered[fcIndex]);
+  if (known) knownCards[key] = true; else delete knownCards[key];
+  updateProgress();
+  renderHome();
+  if (fcIndex < fcFiltered.length - 1) fcIndex++;
+  fcFlipped = false;
+  renderFlashcard();
+}
+
+// ════════════════════════════════════════════
+// QUIZZES
+// ════════════════════════════════════════════
+function renderQuizList() {
+  quizActive = false;
+  const el = document.getElementById('quiz-content');
+  el.innerHTML = '<div class="quiz-list">' + QUIZZES.map((quiz, i) =>
+    `<div class="chapter-card" onclick="startQuiz(${i})">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <span class="mono" style="font-size:12px;color:#9B8E7E">${quiz.ch.map(c => 'Ch ' + c).join(' & ')}</span>
+          <h3 style="font-family:'Crimson Pro',Georgia,serif;font-size:18px;margin-top:4px">${quiz.title}</h3>
+        </div>
+        <span class="mono" style="color:#B0A89E;font-size:12px">${quiz.questions.length} questions</span>
+      </div>
+    </div>`
+  ).join('') + '</div>';
+}
+
+function startQuiz(idx) {
+  quizActive = true; quizIdx = idx; quizQ = 0; quizAnswers = {}; quizSubmitted = false;
+  renderQuizQuestion();
+}
+
+function renderQuizQuestion() {
+  const quiz = QUIZZES[quizIdx];
+  const q = quiz.questions[quizQ];
+  const el = document.getElementById('quiz-content');
+
+  if (quizSubmitted) { renderQuizResults(); return; }
+
+  const opts = q.opts.map((opt, i) =>
+    `<button class="quiz-option ${quizAnswers[quizQ] === i ? 'selected' : ''}" onclick="selectAnswer(${i})">
+      <span class="mono" style="margin-right:10px;color:#B0A89E">${String.fromCharCode(65 + i)}</span>${esc(opt)}
+    </button>`
+  ).join('');
+
+  const isLast = quizQ === quiz.questions.length - 1;
+  el.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:8px">
+      <div>
+        <span class="mono" style="color:#9B8E7E;font-size:12px">${quiz.ch.map(c => 'Ch ' + c).join(' & ')} — ${quiz.title}</span>
+        <h3 class="app-title" style="font-size:20px;margin-top:4px">Question ${quizQ + 1} of ${quiz.questions.length}</h3>
+      </div>
+      <button class="btn-outline" style="font-size:12px" onclick="renderQuizList()">← All Quizzes</button>
+    </div>
+    <div style="animation:fadeIn .25s ease">
+      <p style="font-size:17px;margin-bottom:20px">${esc(q.q)}</p>
+      <div style="display:grid;gap:10px">${opts}</div>
+      <div class="quiz-nav">
+        <button class="btn-outline" onclick="quizPrev()" ${quizQ === 0 ? 'disabled' : ''}>← Back</button>
+        ${!isLast
+          ? `<button class="btn-primary" onclick="quizNext()" ${quizAnswers[quizQ] === undefined ? 'disabled' : ''}>Next →</button>`
+          : `<button class="btn-primary" onclick="submitQuiz()" ${Object.keys(quizAnswers).length < quiz.questions.length ? 'disabled' : ''}>Submit</button>`
+        }
+      </div>
+    </div>`;
+}
+
+function selectAnswer(i) { quizAnswers[quizQ] = i; renderQuizQuestion(); }
+function quizPrev() { if (quizQ > 0) { quizQ--; renderQuizQuestion(); } }
+function quizNext() { quizQ++; renderQuizQuestion(); }
+function submitQuiz() { quizSubmitted = true; renderQuizResults(); }
+
+function renderQuizResults() {
+  const quiz = QUIZZES[quizIdx];
+  const score = quiz.questions.reduce((s, q, i) => s + (quizAnswers[i] === q.correct ? 1 : 0), 0);
+  const total = quiz.questions.length;
+  const msg = score === total ? 'Perfect score!' : score >= total * 0.7 ? 'Well done!' : "Keep studying — you'll get there!";
+  const scoreColor = score === total ? '#4A6741' : '#C4A265';
+
+  let html = `<div class="score-box"><span class="score-num" style="color:${scoreColor}">${score}/${total}</span><p class="text-dim mt-8">${msg}</p></div>`;
+
+  quiz.questions.forEach((q, i) => {
+    const correct = quizAnswers[i] === q.correct;
+    const borderColor = correct ? 'rgba(74,103,65,.2)' : 'rgba(139,58,58,.2)';
+    const opts = q.opts.map((opt, j) => {
+      let cls = 'quiz-option neutral-review';
+      if (j === q.correct) cls = 'quiz-option correct';
+      else if (quizAnswers[i] === j) cls = 'quiz-option wrong';
+      const tag = j === q.correct ? '<span style="float:right;color:#4A6741;font-size:12px">✓ correct</span>' : '';
+      return `<div class="${cls}" style="cursor:default;padding:10px 16px"><span class="mono" style="margin-right:8px;color:#B0A89E">${String.fromCharCode(65 + j)}</span>${esc(opt)}${tag}</div>`;
+    }).join('');
+    html += `<div class="result-card" style="border:1px solid ${borderColor}">
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+        <span style="font-size:16px">${correct ? '✓' : '✗'}</span>
+        <span style="font-size:15px;font-weight:600">${esc(q.q)}</span>
+      </div>
+      <div style="display:grid;gap:6px;margin-bottom:12px">${opts}</div>
+      <p class="result-explain">${esc(q.explain)}</p>
+    </div>`;
+  });
+
+  html += `<div style="display:flex;gap:12px;justify-content:center;margin-top:24px">
+    <button class="btn-outline" onclick="startQuiz(${quizIdx})">Retake Quiz</button>
+    <button class="btn-primary" onclick="renderQuizList()">← All Quizzes</button>
+  </div>`;
+
+  document.getElementById('quiz-content').innerHTML = html;
+}
+
+// ════════════════════════════════════════════
+// THEOREMS
+// ════════════════════════════════════════════
+function renderTheorems() {
+  const chNums = [...new Set(KEY_THEOREMS.map(t => t.ch))].sort((a,b) => a - b);
+  const filtersEl = document.getElementById('thm-filters');
+  filtersEl.innerHTML = `<button class="btn-outline thm-filter-btn ${thmFilter === null ? 'active-filter' : ''}" onclick="setThmFilter(null,this)">All</button>` +
+    chNums.map(ch => `<button class="btn-outline thm-filter-btn ${thmFilter === ch ? 'active-filter' : ''}" onclick="setThmFilter(${ch},this)">${ch}</button>`).join('');
+
+  const filtered = KEY_THEOREMS.filter(t => thmFilter === null || t.ch === thmFilter);
+  document.getElementById('theorem-table').innerHTML = filtered.map(t => {
+    const ch = CHAPTERS[t.ch - 1];
+    return `<div class="theorem-row">
+      <div class="theorem-header">
+        <span class="theorem-name">${t.name}</span>
+        <span class="pill" style="background:${ch.color}15;color:${ch.color};flex-shrink:0">Ch ${t.ch}</span>
+      </div>
+      <p class="theorem-stmt">${esc(t.statement)}</p>
+      <p class="theorem-imp">${esc(t.importance)}</p>
+    </div>`;
+  }).join('');
+}
+
+function setThmFilter(val, btn) {
+  thmFilter = val;
+  document.querySelectorAll('.thm-filter-btn').forEach(b => b.classList.remove('active-filter'));
+  btn.classList.add('active-filter');
+  renderTheorems();
+}
+
+// ════════════════════════════════════════════
+// CONCEPTS
+// ════════════════════════════════════════════
+function renderConcepts() {
+  const el = document.getElementById('concepts-list');
+  el.innerHTML = Object.entries(CONCEPT_MAP).map(([name, data]) => {
+    const ch = CHAPTERS[data.ch - 1];
+    const nodes = data.connects.map(c => `<span class="concept-node">${c}</span>`).join('');
+    return `<div class="concept-card">
+      <div class="concept-header">
+        <span class="concept-title">${name}</span>
+        <span class="pill" style="background:${ch.color}15;color:${ch.color}">Introduced Ch ${data.ch}</span>
+      </div>
+      <div class="concept-nodes">${nodes}</div>
+      <div class="concept-explain"><p>${data.explain}</p></div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('dep-chips').innerHTML = CHAPTERS.slice(2).map(ch =>
+    `<div class="dep-chip" style="background:${ch.color}12;border:1.5px solid ${ch.color}30;color:${ch.color}">${ch.id}. ${ch.title}</div>`
+  ).join('');
+}
+
+// ════════════════════════════════════════════
+// EXERCISES (Image-based viewer)
+// ════════════════════════════════════════════
+let exInited = false;
+let exCurrentSec = null;
+let exCurrentPage = 0;
+
+function exInit() {
+  if (exInited) return;
+  exInited = true;
+  const chSel = document.getElementById('ex-chapter-filter');
+  CHAPTERS.forEach(ch => {
+    const opt = document.createElement('option');
+    opt.value = ch.id;
+    opt.textContent = 'Ch ' + ch.id + ': ' + ch.title;
+    chSel.appendChild(opt);
+  });
+  exRenderGrid();
+}
+
+function exSelectChapter() {
+  const ch = document.getElementById('ex-chapter-filter').value;
+  const secSel = document.getElementById('ex-section-filter');
+  secSel.innerHTML = '<option value="">All Sections</option>';
+  if (ch) {
+    const secs = Object.keys(EX_SEC_PAGES).filter(s => s.startsWith(ch + '.')).sort((a,b) => {
+      return parseInt(a.split('.')[1]) - parseInt(b.split('.')[1]);
+    });
+    secs.forEach(s => {
+      const secNum = parseInt(s.split('.')[1]);
+      const chObj = CHAPTERS[parseInt(ch) - 1];
+      const secName = chObj.sections[secNum - 1] || '';
+      const opt = document.createElement('option');
+      opt.value = s;
+      opt.textContent = '§' + s + (secName ? ' — ' + secName : '') + ' (' + EX_SEC_PAGES[s].p + ' pp)';
+      secSel.appendChild(opt);
+    });
+  }
+  exRenderGrid(ch ? parseInt(ch) : null);
+}
+
+function exSelectSection() {
+  const sec = document.getElementById('ex-section-filter').value;
+  if (sec) {
+    exOpenSection(sec);
+  }
+}
+
+function exRenderGrid(filterCh) {
+  document.getElementById('ex-viewer').style.display = 'none';
+  const grid = document.getElementById('ex-section-grid');
+  grid.style.display = '';
+  
+  const secs = Object.keys(EX_SEC_PAGES).filter(s => {
+    if (filterCh) return parseInt(s.split('.')[0]) === filterCh;
+    return true;
+  }).sort((a,b) => {
+    const [ac, as_] = a.split('.').map(Number);
+    const [bc, bs] = b.split('.').map(Number);
+    return ac !== bc ? ac - bc : as_ - bs;
+  });
+
+  let lastCh = 0;
+  let html = '';
+  secs.forEach(sec => {
+    const ch = parseInt(sec.split('.')[0]);
+    const secNum = parseInt(sec.split('.')[1]);
+    const chObj = CHAPTERS[ch - 1];
+    const secName = chObj.sections[secNum - 1] || '';
+    const info = EX_SEC_PAGES[sec];
+
+    if (ch !== lastCh) {
+      lastCh = ch;
+      if (!filterCh) {
+        html += '<div style="margin-top:24px;margin-bottom:8px"><span class="app-title" style="font-size:18px;font-weight:600;color:' + chObj.color + '">Chapter ' + ch + ': ' + chObj.title + '</span></div>';
+      }
+    }
+
+    html += '<div class="chapter-card" style="display:inline-block;margin:4px;padding:14px 18px;min-width:180px;cursor:pointer" onclick="exOpenSection(\'' + sec + '\')">' +
+      '<div class="accent-bar" style="background:' + chObj.color + '"></div>' +
+      '<span class="mono" style="font-size:13px;font-weight:500;color:' + chObj.color + '">§' + sec + '</span>' +
+      (secName ? '<div style="font-size:13px;color:#6B5D4F;margin-top:2px">' + secName + '</div>' : '') +
+      '<div class="mono" style="font-size:11px;color:#B0A89E;margin-top:4px">' + info.p + ' page' + (info.p > 1 ? 's' : '') + '</div>' +
+    '</div>';
+  });
+
+  grid.innerHTML = html || '<div style="text-align:center;padding:40px;color:#9B8E7E">Select a chapter to browse exercises.</div>';
+}
+
+function exOpenSection(sec) {
+  exCurrentSec = sec;
+  exCurrentPage = 0;
+  document.getElementById('ex-section-grid').style.display = 'none';
+  document.getElementById('ex-viewer').style.display = '';
+  exRenderPage();
+}
+
+function exCloseViewer() {
+  document.getElementById('ex-viewer').style.display = 'none';
+  document.getElementById('ex-section-grid').style.display = '';
+  const ch = document.getElementById('ex-chapter-filter').value;
+  exRenderGrid(ch ? parseInt(ch) : null);
+}
+
+function exRenderPage() {
+  const sec = exCurrentSec;
+  const info = EX_SEC_PAGES[sec];
+  const ch = parseInt(sec.split('.')[0]);
+  const secNum = parseInt(sec.split('.')[1]);
+  const chObj = CHAPTERS[ch - 1];
+  const secName = chObj.sections[secNum - 1] || '';
+
+  document.getElementById('ex-viewer-title').innerHTML = '<span style="color:' + chObj.color + '">§' + sec + '</span>' + (secName ? ' — ' + secName : '');
+  document.getElementById('ex-viewer-pageinfo').textContent = 'Page ' + (exCurrentPage + 1) + ' of ' + info.p;
+
+  const imgPath = 'exercises/' + info.f + '/page' + (exCurrentPage + 1) + '.jpg';
+  const img = document.getElementById('ex-page-img');
+  img.src = imgPath;
+  img.alt = 'Exercises §' + sec + ' page ' + (exCurrentPage + 1);
+  img.onerror = function() {
+    this.style.display = 'none';
+    this.parentElement.innerHTML = '<div style="padding:60px;color:#9B8E7E"><p style="font-size:16px">Image not found</p><p class="mono" style="margin-top:8px">Expected: ' + imgPath + '</p><p style="margin-top:12px;font-size:13px">Make sure the <code>exercises/</code> folder is in the same directory as this HTML file.</p></div>';
+  };
+
+  // Page dots
+  let dots = '';
+  for (let i = 0; i < info.p; i++) {
+    dots += '<button class="btn-outline" style="padding:4px 10px;font-size:12px;min-width:32px;' +
+      (i === exCurrentPage ? 'background:rgba(44,36,24,.1);border-color:rgba(44,36,24,.3)' : '') +
+      '" onclick="exGoToPage(' + i + ')">' + (i + 1) + '</button>';
+  }
+  document.getElementById('ex-page-dots').innerHTML = dots;
+}
+
+function exGoToPage(p) { exCurrentPage = p; exRenderPage(); }
+function exViewerPrev() { if (exCurrentPage > 0) { exCurrentPage--; exRenderPage(); } }
+function exViewerNext() { const info = EX_SEC_PAGES[exCurrentSec]; if (exCurrentPage < info.p - 1) { exCurrentPage++; exRenderPage(); } }
+
+// ════════════════════════════════════════════
+// UTILS
+// ════════════════════════════════════════════
+function esc(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+
+// ════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════
+(function init() {
+  // Populate chapter filter dropdown
+  const sel = document.getElementById('fc-chapter-filter');
+  CHAPTERS.forEach(ch => {
+    const opt = document.createElement('option');
+    opt.value = ch.id;
+    opt.textContent = `Ch ${ch.id}: ${ch.title}`;
+    sel.appendChild(opt);
+  });
+  renderHome();
+  renderTheorems();
+  renderConcepts();
+})();
+</script>
+</body>
+</html>
